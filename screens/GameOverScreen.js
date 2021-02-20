@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View, ScrollView, Image } from "react-native";
+import { StyleSheet, Text, View, Image } from "react-native";
 
 import { AntDesign } from "@expo/vector-icons";
 
@@ -8,14 +8,14 @@ import NumberContainer from "../components/NumberContainer";
 import StyledButton from "../components/StyledButton";
 import colors from "../constants/colors";
 import default_styles from "../constants/default-styles";
+import GuessList from "../components/GuessList";
 
-import { getGuessNumber} from './helpers'
 
 const GameOverScreen = (props) => {
     let guessesMade = props.guessesMade;
 	const numberOfGuesses = guessesMade.length;
 	return (
-		<ScrollView style={styles.screen}>
+		<View style={styles.screen}>
 			<View style={styles.titleContainer}>
 				<Text style={default_styles.title}>Game is over!</Text>
 			</View>
@@ -47,17 +47,7 @@ const GameOverScreen = (props) => {
 			<Card style={styles.headingCard}>
 				<Text style={styles.headingText}>Guesses:</Text>
 			</Card>
-            <Card style={styles.guessesListCard}>
-                <ScrollView
-                    horizontal={true}
-                    contentContainerStyle={styles.guessesList}
-                >
-                    {guessesMade &&
-                        guessesMade.map((guess) => {
-                            return <NumberContainer labelText={`Guess #${getGuessNumber(guessesMade, guess)}`}>{guess}</NumberContainer>;
-                        })}
-                </ScrollView>
-            </Card>
+                <GuessList guesses={guessesMade} horizontal={true} style={styles.guessesList}/>
 			<View style={styles.buttonContainer}>
 				<StyledButton
 					style={{
@@ -71,7 +61,7 @@ const GameOverScreen = (props) => {
 					<AntDesign name="reload1" size={22} color="white" /> New Game
 				</StyledButton>
 			</View>
-		</ScrollView>
+		</View>
 	);
 };
 
@@ -79,7 +69,8 @@ const styles = StyleSheet.create({
 	screen: {
 		flex: 1,
 		alignContent: "center",
-		padding: 5,
+        padding: 5,
+        paddingVertical: 25,
 	},
 	outputCard: {
 		flexDirection: "row",
@@ -127,7 +118,7 @@ const styles = StyleSheet.create({
 	newGameButton: {
 		paddingVertical: 10,
 		paddingHorizontal: 15,
-		marginTop: 25,
+		marginTop: 10,
 	},
 	newGameBtnText: {
 		fontSize: 20,
@@ -144,7 +135,7 @@ const styles = StyleSheet.create({
 	headingCard: {
 		justifyContent: "center",
 		alignItems: "center",
-		marginTop: 20,
+		marginTop: 10,
 		marginBottom: 5,
 		alignSelf: "center",
 		padding: 10,

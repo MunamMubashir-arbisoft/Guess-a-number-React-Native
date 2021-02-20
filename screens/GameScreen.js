@@ -1,16 +1,30 @@
 import React, { useState, useRef, useEffect } from "react";
-import { StyleSheet, View, Text, Alert, ScrollView } from "react-native";
+import {
+	StyleSheet,
+	View,
+	Text,
+	Alert,
+} from "react-native";
 
 import { AntDesign } from "@expo/vector-icons";
 
 import Card from "../components/Card";
 import NumberContainer from "../components/NumberContainer";
 import StyledButton from "../components/StyledButton";
+import GuessList from '../components/GuessList';
 import colors from "../constants/colors";
 import default_styles from "../constants/default-styles";
 
-import { generateRandomBetween, getGuessNumber } from './helpers' 
-
+export const generateRandomBetween = (min, max, exclude) => {
+	min = Math.ceil(min);
+	max = Math.floor(max);
+	const randomGuess = Math.floor(Math.random() * (max - min) + min);
+	if (randomGuess === exclude) {
+		return generateRandomBetween(min, max, exclude);
+	} else {
+		return randomGuess;
+	}
+};
 
 const GameScreen = (props) => {
 	const { userChoice, onGameOver } = props;
@@ -44,7 +58,7 @@ const GameScreen = (props) => {
 		} else {
 			currentLow.current = currentGuess + 1;
 		}
-		setGuesses((prevGuesses) => [...prevGuesses, currentGuess]);
+		setGuesses((prevGuesses) => [...prevGuesses, currentGuess.toString()]);
 		setCurrentGuess(
 			generateRandomBetween(
 				currentLow.current,
@@ -52,8 +66,8 @@ const GameScreen = (props) => {
 				currentGuess
 			)
 		);
-    };
-    
+	};
+
 
 	return (
 		<View style={styles.screen}>
@@ -82,16 +96,7 @@ const GameScreen = (props) => {
 					</StyledButton>
 				</Card>
 			</Card>
-			<ScrollView>
-				{guesses &&
-					guesses.slice(0).reverse().map((guess) => {
-						return (
-							<Card style={styles.contentCard}>
-								<NumberContainer labelText={`Guess #${getGuessNumber(guesses, guess)}`}>{guess}</NumberContainer>
-							</Card>
-						);
-					})}
-			</ScrollView>
+			<GuessList guesses={guesses} reverse={true}/>
 		</View>
 	);
 };
